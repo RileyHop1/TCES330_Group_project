@@ -1,0 +1,18 @@
+WIDTH=16;
+DEPTH=128;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0 : 21BA;
+    1 : 22AB;
+    2 : 23CC;
+    3 : 27ED;
+    4 : 4ABA;
+    5 : 3ACA;
+    6 : 4ADA;
+    7 : 16AA;
+    8 : 0500;
+    [9..127] : 0000;
+END;

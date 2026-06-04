@@ -1,3 +1,10 @@
+/*
+ * Class:        TCES 330 Spring 2026
+ * Names:        Riley Hopper & Jaiden Stipp
+ * Date:         June 3, 2026
+ * Assignment:   Project
+ */
+
 module ControlUnit(
     input clk, rst,
     output [2:0] ALU_s0,
@@ -45,7 +52,7 @@ module ControlUnit(
         .Clk(clk),
         .Clr(PCClr_bus),
         .Up(PCUp_bus),
-        .addr(PCreg)
+        .Addr(PCreg)
     );
     InstMemory Imem (
         .clock(clk), 

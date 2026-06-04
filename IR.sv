@@ -1,3 +1,10 @@
+/*
+ * Class:        TCES 330 Spring 2026
+ * Names:        Riley Hopper & Jaiden Stipp
+ * Date:         June 3, 2026
+ * Assignment:   Project
+ */
+
 module IR (
     input Clk,
     input Load,

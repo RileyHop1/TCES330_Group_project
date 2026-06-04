@@ -1,9 +1,9 @@
 /*
-TCES 330
-Project Phase 1
-ALU module and Testbench
-Jaiden Stipp & Riley Hopper
-*/
+ * Class:        TCES 330 Spring 2026
+ * Names:        Riley Hopper & Jaiden Stipp
+ * Date:         June 3, 2026
+ * Assignment:   Project Phase 1
+ */
 module ALU #(parameter BITLEN=16)(
     input [BITLEN-1:0] A, B,
     input [2:0] Sel,

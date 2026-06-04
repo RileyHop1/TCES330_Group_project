@@ -33,7 +33,10 @@ module DataPath #(
     input  logic [3:0] RF_Ra_addr,
     input  logic [3:0] RF_Rb_addr,
     input  logic [2:0] Alu_s0,
-    input  logic [ADDR_WIDTH-1:0] D_addr
+    input  logic [ADDR_WIDTH-1:0] D_addr,
+    output logic [DATA_WIDTH-1:0] ALU_A,
+    output logic [DATA_WIDTH-1:0] ALU_B,
+    output logic [DATA_WIDTH-1:0] ALU_Out
 );
 
     logic [DATA_WIDTH-1:0] mux_out;
@@ -74,6 +77,10 @@ module DataPath #(
         .Sel(Alu_s0),
         .Q(alu_out)
     );
+
+    assign ALU_A   = rd_data_a;
+    assign ALU_B   = rd_data_b;
+    assign ALU_Out = alu_out;
 
 endmodule
 
