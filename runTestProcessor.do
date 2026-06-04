@@ -26,7 +26,7 @@ vlog "./testProcessor.sv"
 vsim -voptargs="+acc" -t 1ps -L altera_mf_ver -lib work testProcessor
 
 # Load the associated waveform format file
-do wave.do
+do waveTestProcessor.do
 
 # Open the structure/signal panes
 view structure

@@ -1,0 +1,17 @@
+do runMux.do
+quit -sim
+do runAlu.do
+quit -sim
+do runPc.do
+quit -sim
+do runIr.do
+quit -sim
+do runRegfile.do
+quit -sim
+do runRegalu.do
+quit -sim
+do runDatapath.do
+quit -sim
+do runControlunit.do
+quit -sim
+do runTestProcessor.do
