@@ -32,7 +32,7 @@ module ControllerStateMachine (
     input  logic Rst,
     input  logic [15:0] Instruction,
 
-    output logic RFWriteEnable
+    output logic RFWriteEnable,
     output logic DWrite,
     output logic IRLd,
     output logic PCClr,
@@ -44,7 +44,7 @@ module ControllerStateMachine (
     output logic [3:0] NextStateOut,
     output logic [3:0] RFAReadAddr,
     output logic [3:0] RFBReadAddr,
-    output logic [3:0]  RFWriteAddr,
+    output logic [3:0]  RFWriteAddr
 );
     typedef enum logic [3:0] {
         INIT = 4'd0,

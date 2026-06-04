@@ -25,8 +25,10 @@ vlog "./testProcessor.sv"
 #     altsyncram cores in RAM.v / InstMemory.v elaborate and load their .mif data.
 vsim -voptargs="+acc" -t 1ps -L altera_mf_ver -lib work testProcessor
 
-# Set the window types
-view wave
+# Load the associated waveform format file
+do wave.do
+
+# Open the structure/signal panes
 view structure
 view signals
 
