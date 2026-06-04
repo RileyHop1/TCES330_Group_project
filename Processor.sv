@@ -5,9 +5,24 @@
  * Assignment:   Project
  */
 
+/**
+ * Top-level processor: connects the ControlUnit (fetch/decode/control) to the
+ * DataPath (execute). Exposes PC, IR, FSM state, and ALU buses as outputs for
+ * the testbench to observe.
+ *
+ * @input  Clk System clock.
+ * @input  ResetN Active-low reset (inverted into the control unit).
+ * @output IR_Out Current instruction.
+ * @output PC_Ou Program counter value.
+ * @output State FSM current state.
+ * @output NextState  FSM next state.
+ * @output ALU_A ALU operand A.
+ * @output ALU_B ALU operand B.
+ * @output ALU_Out ALU result.
+ */
 module Processor (
-    input  logic        Clk,
-    input  logic        ResetN,
+    input  logic Clk,
+    input  logic ResetN,
     output logic [15:0] IR_Out,
     output logic [6:0]  PC_Out,
     output logic [3:0]  State,
@@ -18,12 +33,12 @@ module Processor (
 );
     logic [2:0] alu_select_bus;
     logic [7:0] d_addr_bus;
-    logic       d_wr_bus;
+    logic d_wr_bus;
     logic [3:0] rf_ra_addr_bus;
     logic [3:0] rf_rb_addr_bus;
     logic [3:0] rf_w_addr_bus;
-    logic       rf_w_en_bus;
-    logic       rf_s_bus;
+    logic rf_w_en_bus;
+    logic rf_s_bus;
 
     ControlUnit CU (
         .clk(Clk),

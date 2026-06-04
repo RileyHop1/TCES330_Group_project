@@ -4,6 +4,18 @@
  * Date:         June 3, 2026
  * Assignment:   Project Phase 1
  */
+
+/**
+ * Combinational ALU. Sel chooses one of 8 operations:
+ * 0 zero, 1 A+B, 2 A-B, 3 pass A, 4 XOR, 5 AND, 6 OR, 7 A+1.
+ *
+ * @param  BITLEN  Bit width of operands and result (default 16).
+ *
+ * @input  A First operand.
+ * @input  B Second operand.
+ * @input  Sel 3-bit operation select.
+ * @output Q Operation result.
+ */
 module ALU #(parameter BITLEN=16)(
     input [BITLEN-1:0] A, B,
     input [2:0] Sel,

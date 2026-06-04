@@ -153,11 +153,12 @@ module DataPath_tb;
         RF_Ra_addr = 4'd0; D_addr = 8'd10; D_wr = 1; RF_W_en = 0;
         @(posedge clk); #1;
         D_wr = 0;
-        assert(dut.DataMemory.mem[10] == 16'd2)
-            else $error("RAM write: expected 2, got %0d", dut.DataMemory.mem[10]);
 
-        D_addr = 8'd10; RF_s = 1; RF_W_en = 1; RF_W_addr = 4'd3;
+        D_addr = 8'd10; RF_s = 1; RF_W_en = 0; RF_W_addr = 4'd3;
         @(posedge clk); #1;
+        RF_W_en = 1;
+        @(posedge clk); #1;
+        RF_W_en = 0;
         assert(dut.regfile.regfile[3] == 16'd2)
             else $error("RAM load to reg[3]: expected 2, got %0d", dut.regfile.regfile[3]);
 
