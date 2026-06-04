@@ -11,24 +11,24 @@
  *
  * @input  clk      Clock signal, writes occur on rising edge.
  * @input  write    Write enable, register is updated only when asserted.
- * @input  wrAddr   3-bit write address, selects one of 8 registers.
+ * @input  wrAddr   4-bit write address, selects one of 8 registers.
  * @input  wrData   16-bit data to write to the selected register.
- * @input  rdAddrA  3-bit read address for port A.
- * @input  rdAddrB  3-bit read address for port B.
+ * @input  rdAddrA  4-bit read address for port A.
+ * @input  rdAddrB  4-bit read address for port B.
  * @output rdDataA  16-bit combinational read output for port A.
  * @output rdDataB  16-bit combinational read output for port B.
  */
 module regfile8x16a(
     input clk, // system clock
     input write, // write enable
-    input [2:0] wrAddr, // write address
+    input [3:0] wrAddr, // write address
     input [15:0] wrData, // write data
-    input [2:0] rdAddrA, // A-side read address
+    input [3:0] rdAddrA, // A-side read address
     output [15:0] rdDataA, // A-side read data
-    input [2:0] rdAddrB, // B-side read address
+    input [3:0] rdAddrB, // B-side read address
     output [15:0] rdDataB 
 ); // B-sdie read data
-    logic [15:0] regfile [0:7]; // 8 registers, each 16-bit
+    logic [15:0] regfile [0:15]; // 16 registers, each 16-bit
 
 
     assign rdDataA = regfile[rdAddrA];
@@ -51,11 +51,11 @@ endmodule
 module regfile8x16a_tb;
     logic clk; // system clock
     logic write; // write enable
-    logic [2:0] wrAddr; // write address
+    logic [3:0] wrAddr; // write address
     logic [15:0] wrData; // write data
-    logic [2:0] rdAddrA; // A-side read address
+    logic [3:0] rdAddrA; // A-side read address
     logic [15:0] rdDataA; // A-side read data
-    logic [2:0] rdAddrB; // B-side read address
+    logic [3:0] rdAddrB; // B-side read address
     logic [15:0] rdDataB; 
 
 
@@ -103,7 +103,7 @@ module regfile8x16a_tb;
             #20;
         end
 
-        for (int i = 0; i < 8; i = i + 1) begin
+        for (int i = 0; i < 16; i = i + 1) begin
             rdAddrB = i;#20;
             $display("RegisterB[%b] = %b", i[2:0], rdDataB);
         end
