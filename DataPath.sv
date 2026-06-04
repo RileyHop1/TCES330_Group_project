@@ -45,12 +45,12 @@ module DataPath #(
     logic [DATA_WIDTH-1:0] rd_data_b;
     logic [DATA_WIDTH-1:0] ram_data_out;
 
-    RAM #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH)) DataMemory (
-        .clk(clk),
-        .we(D_wr),
-        .addr(D_addr),
-        .data_in(rd_data_a),
-        .data_out(ram_data_out)
+    RAM DataMemory (
+        .clock(clk),
+        .wren(D_wr),
+        .address(D_addr),
+        .data(rd_data_a),
+        .q(ram_data_out)
     );
 
     two_to_one_mux #(.WIDTH(DATA_WIDTH)) mux (
