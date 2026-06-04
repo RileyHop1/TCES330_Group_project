@@ -11,15 +11,15 @@
  * @param  DATA_WIDTH   Bit width of data buses and ALU (default 16).
  * @param  ADDR_WIDTH   Bit width of the RAM address bus (default 8 → 256 words).
  *
- * @input  clk          Clock signal. 
- * @input  D_wr         RAM write enable: 1 writes rd_data_a to D_addr.
- * @input  RF_s         Write-back mux select: 0 = ALU result, 1 = RAM read data.
- * @input  RF_W_en      Register file write enable.
- * @input  RF_W_addr    4-bit register file write address (selects 1 of 16 registers).
- * @input  RF_Ra_addr   4-bit register file read address for ALU operand A.
- * @input  RF_Rb_addr   4-bit register file read address for ALU operand B.
- * @input  Alu_s0       3-bit ALU operation select.
- * @input  D_addr       ADDR_WIDTH-bit RAM address for data memory reads/writes.
+ * @input  clk Clock signal. 
+ * @input  D_wr RAM write enable: 1 writes rd_data_a to D_addr.
+ * @input  RF_s Write-back mux select: 0 = ALU result, 1 = RAM read data.
+ * @input  RF_W_en Register file write enable.
+ * @input  RF_W_addr 4-bit register file write address (selects 1 of 16 registers).
+ * @input  RF_Ra_addr 4-bit register file read address for ALU operand A.
+ * @input  RF_Rb_addr 4-bit register file read address for ALU operand B.
+ * @input  Alu_s0 3-bit ALU operation select.
+ * @input  D_addr ADDR_WIDTH-bit RAM address for data memory reads/writes.
  */
 module DataPath #(
     parameter int DATA_WIDTH = 16,
