@@ -57,7 +57,6 @@ module DataPath #(
         .out(mux_out)
     );
 
-    // Register file
     regfile8x16a regfile (
         .clk(clk),
         .write(RF_W_en),
@@ -69,12 +68,94 @@ module DataPath #(
         .rdDataB(rd_data_b)
     );
 
-    // ALU
     ALU #(.BITLEN(DATA_WIDTH)) alu (
         .A(rd_data_a),
         .B(rd_data_b),
         .Sel(Alu_s0),
         .Q(alu_out)
     );
+
+endmodule
+
+
+module DataPath_tb;
+    localparam int DATA_WIDTH = 16;
+    localparam int ADDR_WIDTH = 8;
+
+    logic clk;
+    logic D_wr;
+    logic RF_s;
+    logic RF_W_en;
+    logic [3:0] RF_W_addr;
+    logic [3:0] RF_Ra_addr;
+    logic [3:0] RF_Rb_addr;
+    logic [2:0] Alu_s0;
+    logic [ADDR_WIDTH-1:0] D_addr;
+
+    DataPath #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH)) dut (
+        .clk(clk),
+        .D_wr(D_wr),
+        .RF_s(RF_s),
+        .RF_W_en(RF_W_en),
+        .RF_W_addr(RF_W_addr),
+        .RF_Ra_addr(RF_Ra_addr),
+        .RF_Rb_addr(RF_Rb_addr),
+        .Alu_s0(Alu_s0),
+        .D_addr(D_addr)
+    );
+
+    initial clk = 0;
+    always #5 clk = ~clk;
+
+    initial begin
+        D_wr = 0; RF_s = 0; RF_W_en = 0;
+        RF_W_addr = 0; RF_Ra_addr = 0; RF_Rb_addr = 0;
+        Alu_s0 = 0; D_addr = 0;
+        @(posedge clk);
+
+        RF_W_addr = 4'd0; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd0;
+        Alu_s0 = 3'b000; RF_s = 0; RF_W_en = 1; D_wr = 0;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[0] == 16'd0)
+            else $error("zero reg[0]: expected 0, got %0d", dut.regfile.regfile[0]);
+
+        RF_W_addr = 4'd0; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd0;
+        Alu_s0 = 3'b111; RF_s = 0; RF_W_en = 1; D_wr = 0;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[0] == 16'd1)
+            else $error("inc reg[0]: expected 1, got %0d", dut.regfile.regfile[0]);
+
+        RF_W_addr = 4'd0; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd0;
+        Alu_s0 = 3'b111; RF_s = 0; RF_W_en = 1; D_wr = 0;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[0] == 16'd2)
+            else $error("inc reg[0]: expected 2, got %0d", dut.regfile.regfile[0]);
+
+        RF_W_addr = 4'd1; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd0;
+        Alu_s0 = 3'b011; RF_s = 0; RF_W_en = 1; D_wr = 0;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[1] == 16'd2)
+            else $error("copy to reg[1]: expected 2, got %0d", dut.regfile.regfile[1]);
+
+        RF_W_addr = 4'd2; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd1;
+        Alu_s0 = 3'b001; RF_s = 0; RF_W_en = 1; D_wr = 0;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[2] == 16'd4)
+            else $error("add to reg[2]: expected 4, got %0d", dut.regfile.regfile[2]);
+
+        RF_Ra_addr = 4'd0; D_addr = 8'd10; D_wr = 1; RF_W_en = 0;
+        @(posedge clk); #1;
+        D_wr = 0;
+        assert(dut.DataMemory.mem[10] == 16'd2)
+            else $error("RAM write: expected 2, got %0d", dut.DataMemory.mem[10]);
+
+        D_addr = 8'd10; RF_s = 1; RF_W_en = 1; RF_W_addr = 4'd3;
+        @(posedge clk); #1;
+        assert(dut.regfile.regfile[3] == 16'd2)
+            else $error("RAM load to reg[3]: expected 2, got %0d", dut.regfile.regfile[3]);
+
+        $display("DataPath_tb: all tests passed");
+        $stop;
+    end
 
 endmodule
