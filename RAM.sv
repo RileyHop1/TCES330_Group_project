@@ -38,7 +38,7 @@ module RAM #(
     always_ff @(posedge clk) begin
         
         if(we)
-            mem[addr] <=data_in;
+            mem[addr] <= data_in;
     end
 
 
