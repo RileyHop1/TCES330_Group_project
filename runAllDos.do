@@ -14,4 +14,4 @@ do runDatapath.do
 quit -sim
 do runControlunit.do
 quit -sim
-do runTestProcessor.do
+do runrtl.do

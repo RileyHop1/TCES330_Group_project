@@ -1,3 +1,20 @@
+/*
+ * Class:        TCES 330 Spring 2026
+ * Names:        Riley Hopper & Jaiden Stipp
+ * Date:         June 3, 2026
+ * Assignment:   Project
+ */
+
+/**
+ * Top-level board wrapper for the DE2-115. Instantiates the Processor and
+ * routes its observable signals to the HEX displays. KEY[2] is the manual
+ * clock, KEY[1] is reset, SW[17:15] selects which internal value is shown
+ * on HEX7-HEX4 while HEX3-HEX0 always show the current instruction word.
+ *
+ * @input  KEY  KEY[2] = clock, KEY[1] = active-low reset.
+ * @input  SW   SW[17:15] selects the value driven onto HEX7-HEX4.
+ * @output HEX0-HEX7 Seven-segment display segment drives.
+ */
 module Project(
 	input [2:1] KEY,
 	input [17:15] SW,
