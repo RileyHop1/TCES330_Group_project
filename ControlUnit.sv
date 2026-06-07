@@ -27,21 +27,22 @@
  */
 module ControlUnit(
     input clk, rst,
-    output [2:0] ALU_s0,
-    output [7:0] D_Addr,
-    output D_Wr,
-    output [15:0] IR_Out,
-    output [3:0] NextState,
-    output [3:0] OutState,
-    output [6:0] PC_Out,
-    output [3:0] RF_Ra_addr,
-    output [3:0] RF_Rb_addr,
-    output [3:0] RF_W_addr,
-    output RF_W_en,
-    output RF_s
+    input [3:0] Flags,
+    output logic [2:0] ALU_s0,
+    output logic [7:0] D_Addr,
+    output logic D_Wr,
+    output logic [15:0] IR_Out,
+    output logic [3:0] NextState,
+    output logic [3:0] OutState,
+    output logic [6:0] PC_Out,
+    output logic [3:0] RF_Ra_addr,
+    output logic [3:0] RF_Rb_addr,
+    output logic [3:0] RF_W_addr,
+    output logic RF_W_en,
+    output logic RF_s
 );
-    logic IRLd_bus, PCClr_bus, PCUp_bus;
-    logic [6:0] PCreg;
+    logic IRLd_bus, PCClr_bus, PCUp_bus, PCLd_bus;
+    logic [6:0] PCreg, PC_Din_bus;
     logic [15:0] databus, instbus;
     ControllerStateMachine FSM (
         .Clk(clk), 
@@ -59,7 +60,10 @@ module ControlUnit(
         .RFBReadAddr(RF_Rb_addr),
         .RFSelect(RF_s),
         .RFWriteAddr(RF_W_addr),
-        .RFWriteEnable(RF_W_en)
+        .RFWriteEnable(RF_W_en),
+        .PC_Din(PC_Din_bus),
+        .PCLd(PCLd_bus),
+        .Flags(Flags)
     );
 
     IR instrucReg (
@@ -72,6 +76,8 @@ module ControlUnit(
         .Clk(clk),
         .Clr(PCClr_bus),
         .Up(PCUp_bus),
+        .Ld(PCLd_bus),
+        .Din(PC_Din_bus),
         .Addr(PCreg)
     );
     InstMemory Imem (

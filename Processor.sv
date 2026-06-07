@@ -37,12 +37,14 @@ module Processor (
     logic [3:0] rf_ra_addr_bus;
     logic [3:0] rf_rb_addr_bus;
     logic [3:0] rf_w_addr_bus;
+    logic [3:0] Flags_bus;
     logic rf_w_en_bus;
     logic rf_s_bus;
 
     ControlUnit CU (
         .clk(Clk),
         .rst(~ResetN),
+        .Flags(Flags_bus),
         .ALU_s0(alu_select_bus),
         .D_Addr(d_addr_bus),
         .D_Wr(d_wr_bus),
@@ -69,7 +71,8 @@ module Processor (
         .D_addr(d_addr_bus),
         .ALU_A(ALU_A),
         .ALU_B(ALU_B),
-        .ALU_Out(ALU_Out)
+        .ALU_Out(ALU_Out),
+        .Flags(Flags_bus)
     );
 
 endmodule

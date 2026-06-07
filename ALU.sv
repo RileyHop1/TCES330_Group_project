@@ -19,23 +19,32 @@
 module ALU #(parameter BITLEN=16)(
     input [BITLEN-1:0] A, B,
     input [2:0] Sel,
-    output logic [BITLEN-1:0] Q
+    output logic [BITLEN-1:0] Q,
+    output logic [3:0] Flags
 );
-    always_comb 
-        
+    logic Co, V, N, Z;
+    
+    always_comb begin
+        Co = 0;
         case (Sel)
 
             3'b000: Q = 0;     // Zero
-            3'b001: Q = A + B; // Addition
-            3'b010: Q = A - B; // Subtraction
+            3'b001: {Co, Q} = {1'b0, A} + {1'b0, B}; // Addition
+            3'b010: {Co, Q} = {1'b0, A} - {1'b0, B}; // Subtraction
             3'b011: Q = A;     // Passing A through ALU
             3'b100: Q = A ^ B; // XOR
             3'b101: Q = A & B; // AND
             3'b110: Q = A | B; // OR
             3'b111: Q = A + 1; // Incrementing
             default: Q = {BITLEN{1'bx}};
-        endcase
 
+            
+        endcase
+        V = Co ^ A[BITLEN-1] ^ B[BITLEN-1] ^ Q[BITLEN-1];
+        N = Q[BITLEN-1];
+        Z = ~|Q;
+    end
+    assign Flags = {Co, V, N, Z};
 endmodule
 
 

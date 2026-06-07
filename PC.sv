@@ -18,12 +18,16 @@ module PC (
     input Clk,
     input Clr,
     input Up,
+    input Ld,
+    input [6:0] Din,
     output logic [6:0] Addr
 );
 
     always_ff @(posedge Clk) begin
         if (Clr) begin
             Addr <= 7'b0000000;
+        end else if (Ld) begin
+            Addr <= Din;
         end else if (Up) begin
             Addr <= Addr + 1;
         end

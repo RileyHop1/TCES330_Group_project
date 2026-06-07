@@ -27,7 +27,7 @@ module regfile8x16a(
     output [15:0] rdDataA, // A-side read data
     input [3:0] rdAddrB, // B-side read address
     output [15:0] rdDataB 
-); // B-sdie read data
+); // B-side read data
     logic [15:0] regfile [0:15]; // 16 registers, each 16-bit
 
 

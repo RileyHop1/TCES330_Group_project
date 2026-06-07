@@ -28,23 +28,26 @@
  * @output RFWriteEnable Register-file write enable.
  */
 module ControllerStateMachine (
-    input  logic Clk,
-    input  logic Rst,
-    input  logic [15:0] Instruction,
-
+    input Clk,
+    input Rst,
+    input [3:0] Flags,
+    input [15:0] Instruction,
+    input [6:0] CurrentPC,
     output logic RFWriteEnable,
     output logic DWrite,
     output logic IRLd,
     output logic PCClr,
     output logic PCUp,
     output logic RFSelect,
+    output logic PCLd,
     output logic [2:0] ALUSelect,
     output logic [3:0] CurrentStateOut,
     output logic [7:0] DAddr,
     output logic [3:0] NextStateOut,
     output logic [3:0] RFAReadAddr,
     output logic [3:0] RFBReadAddr,
-    output logic [3:0]  RFWriteAddr
+    output logic [3:0] RFWriteAddr,
+    output logic [6:0] PC_Din
 );
     typedef enum logic [3:0] {
         INIT = 4'd0,
@@ -56,7 +59,12 @@ module ControllerStateMachine (
         EXECUTE_LOAD_WAIT = 4'd6,
         EXECUTE_STORE = 4'd7,
         EXECUTE_NOOP = 4'd8,
-        EXECUTE_HALT = 4'd9
+        EXECUTE_HALT = 4'd9,
+        EXECUTE_JUMP = 4'd10,
+        EXECUTE_JNZ_CHECK = 4'd11,
+        EXECUTE_JNZ_PASS = 4'd12,
+        EXECUTE_JLT_COMP = 4'd13,
+        EXECUTE_JLT_PASS = 4'd14
     } states;
 
     typedef enum logic [3:0] {
@@ -65,7 +73,10 @@ module ControllerStateMachine (
         LOAD = 4'b0010,
         ADD = 4'b0011,
         SUBTRACT = 4'b0100,
-        HALT = 4'b0101
+        HALT = 4'b0101,
+        JUMP = 4'b0110,
+        JNZ = 4'b1000,
+        JLT = 4'b1001
     } opcodes;
 
     states CurrentState, NextState;
@@ -93,6 +104,8 @@ module ControllerStateMachine (
         RFSelect = 1'b0;
         RFWriteAddr = 4'b0;
         RFWriteEnable = 1'b0;
+        PCLd = 1'b0;
+        PC_Din = 7'b0;
 
         case (CurrentState)
             INIT: begin
@@ -111,7 +124,10 @@ module ControllerStateMachine (
                     LOAD: NextState = EXECUTE_LOAD_REQ;
                     ADD: NextState = EXECUTE_ADD;
                     SUBTRACT: NextState = EXECUTE_SUB;
-                    HALT:     NextState = EXECUTE_HALT;
+                    HALT: NextState = EXECUTE_HALT;
+                    JUMP: NextState = EXECUTE_JUMP;
+                    JNZ: NextState = EXECUTE_JNZ_CHECK;
+                    JLT: NextState = EXECUTE_JLT_COMP;
                     default:  NextState = FETCH;
                 endcase
             end
@@ -122,16 +138,19 @@ module ControllerStateMachine (
                 DAddr = Instruction[7:0];
                 DWrite = 1'b1;
                 RFAReadAddr = Instruction[11:8];
+
                 NextState = FETCH;
             end
             EXECUTE_LOAD_REQ: begin
                 DAddr = Instruction[11:4];
+
                 NextState = EXECUTE_LOAD_WAIT;
             end
             EXECUTE_LOAD_WAIT: begin
                 RFSelect = 1'b1;
                 RFWriteEnable = 1'b1;
                 RFWriteAddr = Instruction[3:0];
+
                 NextState = FETCH;
             end
             EXECUTE_ADD: begin
@@ -141,6 +160,7 @@ module ControllerStateMachine (
                 RFAReadAddr = Instruction[11:8];
                 RFBReadAddr = Instruction[7:4];
                 ALUSelect = 3'b001;
+
                 NextState = FETCH;
             end
             EXECUTE_SUB: begin
@@ -150,10 +170,50 @@ module ControllerStateMachine (
                 RFAReadAddr = Instruction[11:8];
                 RFBReadAddr = Instruction[7:4];
                 ALUSelect = 3'b010;
+
                 NextState = FETCH;
             end
             EXECUTE_HALT: begin
                 NextState = EXECUTE_HALT;
+            end
+            EXECUTE_JUMP: begin
+                PCLd = 1'b1;
+                PC_Din = Instruction[6:0];
+
+                NextState = FETCH;
+            end
+            EXECUTE_JNZ_CHECK: begin
+                RFAReadAddr = Instruction[3:0];
+                ALUSelect = 3'b011;
+
+                NextState = EXECUTE_JNZ_PASS;
+            end
+            EXECUTE_JNZ_PASS: begin
+                RFAReadAddr = Instruction[3:0];
+                ALUSelect = 3'b011;
+                if (~Flags[0]) begin
+                    PC_Din = Instruction[10:4];
+                    PCLd = 1'b1;
+                end
+
+                NextState = FETCH;
+            end
+            EXECUTE_JLT_COMP: begin
+                RFAReadAddr = Instruction[11:8];
+                RFBReadAddr = Instruction[7:4];
+                ALUSelect = 3'b010;
+
+                NextState = EXECUTE_JLT_PASS;
+            end
+            EXECUTE_JLT_PASS: begin
+                RFAReadAddr = Instruction[11:8];
+                RFBReadAddr = Instruction[7:4];
+                ALUSelect = 3'b010;
+                if (Flags[2] ^ Flags[1]) begin
+                    PC_Din = CurrentPC + {{3{Instruction[3]}}, Instruction[3:0]}; // Sign Extends the offset to add to the PC
+                    PCLd = 1'b1;
+                end
+                NextState = FETCH;
             end
             default: begin
                 NextState = INIT;

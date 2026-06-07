@@ -36,7 +36,8 @@ module DataPath #(
     input  logic [ADDR_WIDTH-1:0] D_addr,
     output logic [DATA_WIDTH-1:0] ALU_A,
     output logic [DATA_WIDTH-1:0] ALU_B,
-    output logic [DATA_WIDTH-1:0] ALU_Out
+    output logic [DATA_WIDTH-1:0] ALU_Out,
+    output logic [3:0] Flags
 );
 
     logic [DATA_WIDTH-1:0] mux_out;
@@ -44,6 +45,7 @@ module DataPath #(
     logic [DATA_WIDTH-1:0] rd_data_a;
     logic [DATA_WIDTH-1:0] rd_data_b;
     logic [DATA_WIDTH-1:0] ram_data_out;
+    
 
     RAM DataMemory (
         .clock(clk),
@@ -75,7 +77,8 @@ module DataPath #(
         .A(rd_data_a),
         .B(rd_data_b),
         .Sel(Alu_s0),
-        .Q(alu_out)
+        .Q(alu_out),
+        .Flags(Flags)
     );
 
     assign ALU_A   = rd_data_a;
