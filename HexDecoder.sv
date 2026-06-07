@@ -1,3 +1,16 @@
+/*
+ * Class:        TCES 330 Spring 2026
+ * Names:        Riley Hopper & Jaiden Stipp
+ * Date:         June 3, 2026
+ * Assignment:   Project
+ */
+
+/**
+ * Seven-segment decoder for the DE2-115 HEX displays.
+
+ * @input  in  4-bit value (0x0-0xF) to display.
+ * @output out 7-bit segment drive {g,f,e,d,c,b,a}, active low.
+ */
 module HexDecoder (
     input  logic [3:0] in,
     output logic [6:0] out

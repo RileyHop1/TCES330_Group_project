@@ -1,3 +1,12 @@
+# ============================================================================
+# runrtl.do — top-level RTL simulation macro (rubric-required name).
+# Compiles all sources leaf-first, loads the testProcessor testbench with the
+# Altera megafunction library, applies the wave.do format, and runs to $stop.
+#
+# Usage (ModelSim/Questa Tcl console, from this directory):
+#     do runrtl.do
+# ============================================================================
+
 # Create work library
 vlib work
 
@@ -11,8 +20,8 @@ vlog "./RegFile.sv"
 vlog "./IR.sv"
 vlog "./PC.sv"
 vlog "./ControllerStateMachine.sv"
-vlog "./InstMemory.v"   
-vlog "./RAM.v"          
+vlog "./InstMemory.v"
+vlog "./RAM.v"
 vlog "./ControlUnit.sv"
 vlog "./DataPath.sv"
 vlog "./Processor.sv"
@@ -26,7 +35,7 @@ vlog "./testProcessor.sv"
 vsim -voptargs="+acc" -t 1ps -L altera_mf_ver -lib work testProcessor
 
 # Load the associated waveform format file
-do waveTestProcessor.do
+do wave.do
 
 # Open the structure/signal panes
 view structure
