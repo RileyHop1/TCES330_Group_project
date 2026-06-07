@@ -5,6 +5,8 @@ add wave -divider "Clock / Control"
 add wave -noupdate                 /PC_tb/Clk
 add wave -noupdate                 /PC_tb/Clr
 add wave -noupdate                 /PC_tb/Up
+add wave -noupdate                 /PC_tb/Ld
+add wave -noupdate -radix unsigned /PC_tb/Din
 add wave -divider "Output"
 add wave -noupdate -radix unsigned /PC_tb/Addr
 

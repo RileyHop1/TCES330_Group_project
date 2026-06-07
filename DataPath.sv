@@ -20,6 +20,9 @@
  * @input  RF_Rb_addr 4-bit register file read address for ALU operand B.
  * @input  Alu_s0 3-bit ALU operation select.
  * @input  D_addr ADDR_WIDTH-bit RAM address for data memory reads/writes.
+ * @output Flags 4-bit ALU flag bus {Carry, Overflow, Negative, Zero},
+ *         passed through from the ALU for the control unit's conditional
+ *         branches.
  */
 module DataPath #(
     parameter int DATA_WIDTH = 16,
@@ -101,6 +104,7 @@ module DataPath_tb;
     logic [3:0] RF_Rb_addr;
     logic [2:0] Alu_s0;
     logic [ADDR_WIDTH-1:0] D_addr;
+    logic [3:0] Flags;
 
     DataPath #(.DATA_WIDTH(DATA_WIDTH), .ADDR_WIDTH(ADDR_WIDTH)) dut (
         .clk(clk),
@@ -111,7 +115,8 @@ module DataPath_tb;
         .RF_Ra_addr(RF_Ra_addr),
         .RF_Rb_addr(RF_Rb_addr),
         .Alu_s0(Alu_s0),
-        .D_addr(D_addr)
+        .D_addr(D_addr),
+        .Flags(Flags)
     );
 
     initial clk = 0;
@@ -128,6 +133,8 @@ module DataPath_tb;
         @(posedge clk); #1;
         assert(dut.regfile.regfile[0] == 16'd0)
             else $error("zero reg[0]: expected 0, got %0d", dut.regfile.regfile[0]);
+        assert(Flags[0] == 1'b1)
+            else $error("zero op: expected Zero flag set, got Flags=%04b", Flags);
 
         RF_W_addr = 4'd0; RF_Ra_addr = 4'd0; RF_Rb_addr = 4'd0;
         Alu_s0 = 3'b111; RF_s = 0; RF_W_en = 1; D_wr = 0;

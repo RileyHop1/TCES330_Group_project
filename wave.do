@@ -13,6 +13,7 @@ add wave -divider "ALU / Datapath"
 add wave -noupdate -radix hexadecimal /testProcessor/ALU_A
 add wave -noupdate -radix hexadecimal /testProcessor/ALU_B
 add wave -noupdate -radix hexadecimal /testProcessor/ALU_Out
+add wave -noupdate -radix binary      /testProcessor/DUT/Flags_bus
 add wave -divider "Register File"
 add wave -noupdate -radix hexadecimal /testProcessor/DUT/DP/regfile/regfile
 

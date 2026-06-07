@@ -7,6 +7,7 @@ add wave -noupdate -radix hexadecimal /ALU_tb/A
 add wave -noupdate -radix hexadecimal /ALU_tb/B
 add wave -divider "Output"
 add wave -noupdate -radix hexadecimal /ALU_tb/Q
+add wave -noupdate -radix binary      /ALU_tb/Flags
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ps} 0}

@@ -4,6 +4,7 @@ quietly WaveActivateNextPane {} 0
 add wave -divider "Clock / Reset"
 add wave -noupdate                    /ControlUnit_tb/clk
 add wave -noupdate                    /ControlUnit_tb/rst
+add wave -noupdate -radix binary      /ControlUnit_tb/Flags
 add wave -divider "Fetch / Decode"
 add wave -noupdate -radix unsigned    /ControlUnit_tb/PC_Out
 add wave -noupdate -radix hexadecimal /ControlUnit_tb/IR_Out

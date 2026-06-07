@@ -7,12 +7,16 @@
 
 /**
  * Controller FSM. Each clock it advances INIT -> FETCH -> DECODE -> an execute
- * state for the decoded opcode (NOOP/STORE/LOAD/ADD/SUB/HALT), driving the
- * datapath plus PC/IR control signals for that step.
+ * state for the decoded opcode (NOOP/STORE/LOAD/ADD/SUB/HALT/JUMP/JNZ/JLT),
+ * driving the datapath plus PC/IR control signals for that step.
  *
  * @input Clk System clock.
  * @input Rst Asynchronous reset to INIT (active high).
+ * @input Flags 4-bit ALU flag bus {Carry, Overflow, Negative, Zero}, used to
+ *        decide whether conditional branches (JNZ/JLT) are taken.
  * @input Instruction Current instruction from the IR (opcode + operands).
+ * @input CurrentPC Current program-counter value, used to compute JLT's
+ *        PC-relative jump target.
  * @output ALUSelect 3-bit ALU operation select.
  * @output CurrentStateOut Current FSM state.
  * @output NextStateOut Next FSM state.
@@ -21,6 +25,8 @@
  * @output IRLd Instruction-register load enable.
  * @output PCClr Program-counter clear.
  * @output PCUp Program-counter increment.
+ * @output PCLd Program-counter load enable (JUMP/JNZ/JLT branch taken).
+ * @output PC_Din 7-bit value to load into the PC when PCLd is asserted.
  * @output RFAReadAddr Register-file read address A.
  * @output RFBReadAddr Register-file read address B.
  * @output RFSelect Write-back mux select.

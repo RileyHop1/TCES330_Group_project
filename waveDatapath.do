@@ -16,6 +16,7 @@ add wave -divider "ALU"
 add wave -noupdate -radix hexadecimal /DataPath_tb/dut/ALU_A
 add wave -noupdate -radix hexadecimal /DataPath_tb/dut/ALU_B
 add wave -noupdate -radix hexadecimal /DataPath_tb/dut/ALU_Out
+add wave -noupdate -radix binary      /DataPath_tb/Flags
 add wave -divider "Register File"
 add wave -noupdate -radix hexadecimal /DataPath_tb/dut/regfile/regfile
 
