@@ -19,7 +19,7 @@
  *         ~10 ms at the DE2-115's 50 MHz CLOCK_50).
  *
  * @input  Clk    Stable sampling clock (e.g. CLOCK_50). Must NOT be derived
- *                from Btn_in — that is the chicken-and-egg problem this
+ *                from Btn_in, that is the chicken-and-egg problem this
  *                module exists to avoid.
  * @input  Btn_in Raw, asynchronous button/switch input (e.g. a KEY pin).
  * @output Btn_out Debounced, synchronized, glitch-free level.

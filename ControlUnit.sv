@@ -11,7 +11,7 @@
  * the datapath control signals and exposes PC/IR/state for observing.
  *
  * @input clk System clock.
- * @input rst Reset (active high) — restarts the FSM.
+ * @input rst Reset (active high), restarts the FSM.
  * @input Flags Input from datapath that holds the flags from the ALU
  * @output ALU_s0 3-bit ALU operation select.
  * @output D_Addr 8-bit data-memory address.
