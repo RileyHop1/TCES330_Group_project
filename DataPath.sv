@@ -9,7 +9,7 @@
  * Datapath for the multicycle programmable processor.
  *
  * @param  DATA_WIDTH   Bit width of data buses and ALU (default 16).
- * @param  ADDR_WIDTH   Bit width of the RAM address bus (default 8 → 256 words).
+ * @param  ADDR_WIDTH   Bit width of the RAM address bus (default 8 ).
  *
  * @input  clk Clock signal. 
  * @input  D_wr RAM write enable: 1 writes rd_data_a to D_addr.
